@@ -51,6 +51,17 @@ task copyJarToBin (type: Copy){
 	into "D:\\build\\20220525"
 }
 
+//task migrateDev(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
+//	url = "jdbc:mysql://devifmkproduct001:3306/fmkocl?useSSL=false"
+//	user = "I_FMKOCL_OWN"
+//	password = "fmkapppwd"
+//	doLast {
+//		println "Executed: " + name
+//	}
+//}
+
+task migrateDev(type: org.flywaydb)
+
 generateSchema {
 	format = true
 	scriptAction = "create"
@@ -58,7 +69,7 @@ generateSchema {
 	databaseProductName = "MySQL"
 	databaseMajorVersion = 8
 	databaseMinorVersion = 0
-	packageToScan = []
+	packageToScan = ["ken.ball.inventory.entity"]
 	properties = [
 		"hibernate.dialect"                                            : "org.hibernate.dialect.MySQL8Dialect",
 		"hibernate.implicit_naming_strategy"                           : "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy",
@@ -66,24 +77,3 @@ generateSchema {
 		"hibernate.use_sql_comments"                                   : "true",
 	]
 }
-
-
-
-/*
-generateSchema {
-	format = true
-	scriptAction = "create"
-	vendor = "hibernate+spring"
-	databaseProductName = "MySQL"
-	databaseMajorVersion = 8
-	databaseMinorVersion = 0
-	packageToScan = ["hk.judiciary.fmk.ocl.entity",]
-	properties = [
-		"hibernate.dialect"                                            : "org.hibernate.dialect.MySQL8Dialect",
-		"hibernate.implicit_naming_strategy"                           : "org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy",
-		"hibernate.physical_naming_strategy"                           : "org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy",
-		"hibernate.use_sql_comments"                                   : "true",
-	]
-}
-*
-*/

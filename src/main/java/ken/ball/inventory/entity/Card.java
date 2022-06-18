@@ -1,15 +1,16 @@
 package ken.ball.inventory.entity;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.Parameter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 /*
 * @Data
@@ -41,15 +42,56 @@ public class DownloadedFile extends AbstractAudit {
     @TableGenerator(name = "card_table_gen", table = "table_seq_no", pkColumnName = "table_name", valueColumnName = "id_value", initialValue = 1, allocationSize = 1)
 * */
 
+/*
+*
+* @OneToOne(cascade = CascadeType.ALL)
+@JoinTable(name = "emp_workstation",
+  joinColumns =
+    { @JoinColumn(name = "employee_id", referencedColumnName = "id") },
+  inverseJoinColumns =
+    { @JoinColumn(name = "workstation_id", referencedColumnName = "id") })
+*
+* */
+
+
 @Data
+@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Card extends AbstractAudit{
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
-    @GenericGenerator(name = "native", strategy = "native")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card-sequence-generator")
+    @GenericGenerator(name = "card-sequence-generator",
+            strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+            parameters = {
+                @Parameter(name = "sequence_name", value = "card_seq_no")
+            }
+    )
     private Long id;
+
+    @OneToMany(mappedBy = "card")
+    private Set<Port> ports;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "card_splitter",
+        joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "splitter_id", referencedColumnName = "id")}
+    )
+    private Splitter splitter;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "card_localDp",
+            joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
+            inverseJoinColumns = {@JoinColumn(name = "localDp_id", referencedColumnName = "id")}
+    )
+    private LocalDP localDP;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinTable(name = "card_mainDp",
+        joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
+        inverseJoinColumns = {@JoinColumn(name = "mainDp_id", referencedColumnName = "id")}
+    )
+    private MainDP mainDP;
 
     private String cardType;
 
@@ -61,4 +103,5 @@ public class Card extends AbstractAudit{
     private String floor;
 
     private Long sparePortCnt;
+
 }
