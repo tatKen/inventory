@@ -1,5 +1,7 @@
 package ken.ball.inventory.entity;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -58,6 +60,7 @@ public class DownloadedFile extends AbstractAudit {
 @EqualsAndHashCode
 @Entity
 @NoArgsConstructor
+@JsonDeserialize(builder = Card.CardBuilder.class)
 public class Card extends AbstractAudit{
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "card-sequence-generator")
@@ -77,6 +80,7 @@ public class Card extends AbstractAudit{
         joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "splitter_id", referencedColumnName = "id")}
     )
+    @Basic(fetch = FetchType.LAZY)
     private Splitter splitter;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -84,6 +88,7 @@ public class Card extends AbstractAudit{
             joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "localDp_id", referencedColumnName = "id")}
     )
+    @Basic(fetch = FetchType.LAZY)
     private LocalDP localDP;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -91,6 +96,7 @@ public class Card extends AbstractAudit{
         joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
         inverseJoinColumns = {@JoinColumn(name = "mainDp_id", referencedColumnName = "id")}
     )
+    @Basic(fetch = FetchType.LAZY)
     private MainDP mainDP;
 
     private String cardType;
@@ -104,4 +110,7 @@ public class Card extends AbstractAudit{
 
     private Long sparePortCnt;
 
+    @JsonPOJOBuilder(withPrefix = "")
+    public static final class CardBuilder {
+    }
 }

@@ -15,13 +15,8 @@ public class InventoryApplication {
 		SpringApplication.run(InventoryApplication.class, args);
 	}
 
-	@Bean
-	public CommandLineRunner commandLineRunner(ApplicationContext cts){
-		return args -> {
-			System.out.println("Let's inspect the beans provided by Spring Boot:");
-			String[] beansName = cts.getBeanDefinitionNames();
-			Arrays.stream(beansName).sorted().forEach(System.out::println);
-		};
-	}
-
+//	public static void main(String[] args) {
+//		SpringApplication springApplication = new SpringApplication(FmkOclServiceApplication.class);
+//		springApplication.run(args);
+//	}
 }

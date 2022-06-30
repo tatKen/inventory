@@ -10,6 +10,7 @@ plugins {
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id "io.github.divinespear.jpa-schema-generate" version '0.4.0'
 	id 'java'
+	id "org.flywaydb.flyway" version "8.5.13"
 }
 
 group = 'test.gradle'
@@ -47,20 +48,18 @@ tasks.named('test') {
 }
 
 task copyJarToBin (type: Copy){
-	from jar
+	from bootJar
 	into "D:\\build\\20220525"
 }
 
-//task migrateDev(type: org.flywaydb.gradle.task.FlywayMigrateTask) {
-//	url = "jdbc:mysql://devifmkproduct001:3306/fmkocl?useSSL=false"
-//	user = "I_FMKOCL_OWN"
-//	password = "fmkapppwd"
-//	doLast {
-//		println "Executed: " + name
-//	}
-//}
-
-task migrateDev(type: org.flywaydb)
+task migrateDev(type: org.flywaydb.gradle.task.FlywayMigrateTask){
+	url = "jdbc:mysql://192.168.150.138:3306/inventory_dev?useSSL=false"
+	user = "ops_inv"
+	password = "password"
+	doLast{
+		println "Excuted:" + name
+	}
+}
 
 generateSchema {
 	format = true
