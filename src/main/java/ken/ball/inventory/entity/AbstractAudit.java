@@ -3,7 +3,10 @@ package ken.ball.inventory.entity;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.TypeDef;
 import org.hibernate.annotations.TypeDefs;
 import org.springframework.data.annotation.CreatedBy;
@@ -24,6 +27,9 @@ import java.time.LocalDateTime;
 @TypeDefs({
         @TypeDef(name="json", typeClass = JsonStringType.class),
 })
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AbstractAudit implements Serializable {
 
     @CreatedBy

@@ -1,16 +1,16 @@
 package ken.ball.inventory.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.GeneratorType;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.Parameter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
@@ -56,10 +56,12 @@ public class DownloadedFile extends AbstractAudit {
 * */
 
 
-@Data
-@EqualsAndHashCode
 @Entity
+@Getter
+@Setter
+@AllArgsConstructor
 @NoArgsConstructor
+@ToString
 @JsonDeserialize(builder = Card.CardBuilder.class)
 public class Card extends AbstractAudit{
     @Id
@@ -75,6 +77,7 @@ public class Card extends AbstractAudit{
     @OneToMany(mappedBy = "card")
     private Set<Port> ports;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "card_splitter",
         joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
@@ -83,6 +86,7 @@ public class Card extends AbstractAudit{
     @Basic(fetch = FetchType.LAZY)
     private Splitter splitter;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "card_localDp",
             joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
@@ -91,6 +95,7 @@ public class Card extends AbstractAudit{
     @Basic(fetch = FetchType.LAZY)
     private LocalDP localDP;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinTable(name = "card_mainDp",
         joinColumns = {@JoinColumn(name = "card_id", referencedColumnName = "id")},
@@ -100,17 +105,30 @@ public class Card extends AbstractAudit{
     private MainDP mainDP;
 
     private String cardType;
-
     @NaturalId
     private String name;
-
     private String status;
-
     private String floor;
+    private int sparePortCnt;
 
-    private Long sparePortCnt;
+    @Builder(builderMethodName = "CardBuilder")
+    public Card(String createdBy, LocalDateTime createdDateTime, String lastModifiedBy, LocalDateTime lastModifiedDateTime, Integer version, Long id, Set<Port> ports, Splitter splitter, LocalDP localDP, MainDP mainDP, String cardType, String name, String status, String floor, int sparePortCnt) {
+        super(createdBy, createdDateTime, lastModifiedBy, lastModifiedDateTime, version);
+        this.id = id;
+        this.ports = ports;
+        this.splitter = splitter;
+        this.localDP = localDP;
+        this.mainDP = mainDP;
+        this.cardType = cardType;
+        this.name = name;
+        this.status = status;
+        this.floor = floor;
+        this.sparePortCnt = sparePortCnt;
+    }
 
     @JsonPOJOBuilder(withPrefix = "")
-    public static final class CardBuilder {
+    public static final class CardJsonBuilder {
     }
+
+
 }

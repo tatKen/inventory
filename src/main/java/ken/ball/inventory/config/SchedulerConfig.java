@@ -1,7 +1,7 @@
 package ken.ball.inventory.config;
 
-import ken.ball.inventory.service.FixedDateCronJob;
-import ken.ball.inventory.service.WeeklyCronJob;
+import ken.ball.inventory.jobs.FixedDateCronJob;
+import ken.ball.inventory.jobs.WeeklyCronJob;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.*;
@@ -13,40 +13,40 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.PostConstruct;
 
-@Slf4j
-@RequiredArgsConstructor
-@AutoConfigureAfter(QuartzAutoConfiguration.class)
-@Configuration
+//@Slf4j
+//@RequiredArgsConstructor
+//@AutoConfigureAfter(QuartzAutoConfiguration.class)
+//@Configuration
 public class SchedulerConfig {
 
-    private final Scheduler scheduler;
-    @Value("${app.ball.weekly.cron}")
-    private String weeklyCron;
-    @Value("${app.ball.fixday.cron}")
-    private String fixDayCron;
-
-    @PostConstruct
-    public void scheduleJobs() throws SchedulerException{
-        // delete old batch jobs
-        for(JobKey key: scheduler.getJobKeys(GroupMatcher.jobGroupEquals("batch"))){
-            scheduler.deleteJob(key);
-        }
-
-        // Deploy batch jobs
-        JobDetail wekklyJobDetail = JobBuilder.newJob(WeeklyCronJob.class)
-                .withIdentity(JobKey.jobKey("week_cron_job", "batch"))
-                .withDescription("Running weekly job").build();
-        Trigger weeklyTrigger = TriggerBuilder.newTrigger().withIdentity("week_cron_trigger").forJob(wekklyJobDetail)
-                .withSchedule(CronScheduleBuilder.cronSchedule(weeklyCron)).build();
-        scheduler.scheduleJob(wekklyJobDetail, weeklyTrigger);
-
-        JobDetail fixDayJobDetail = JobBuilder.newJob(FixedDateCronJob.class)
-                .withIdentity(JobKey.jobKey("fixed_date_dron_job", "batch"))
-                .withDescription("Running fixed day job").build();
-        Trigger fixedDayTrigger = TriggerBuilder.newTrigger().withIdentity("fixed_date_trigger").forJob(fixDayJobDetail)
-                .withSchedule(CronScheduleBuilder.cronSchedule(fixDayCron)).build();
-        scheduler.scheduleJob(fixDayJobDetail, fixedDayTrigger);
-    }
+//    private final Scheduler scheduler;
+//    @Value("${app.ball.weekly.cron}")
+//    private String weeklyCron;
+//    @Value("${app.ball.fixday.cron}")
+//    private String fixDayCron;
+//
+//    @PostConstruct
+//    public void scheduleJobs() throws SchedulerException{
+//        // delete old batch jobs
+//        for(JobKey key: scheduler.getJobKeys(GroupMatcher.jobGroupEquals("batch"))){
+//            scheduler.deleteJob(key);
+//        }
+//
+//        // Deploy batch jobs
+//        JobDetail wekklyJobDetail = JobBuilder.newJob(WeeklyCronJob.class)
+//                .withIdentity(JobKey.jobKey("week_cron_job", "batch"))
+//                .withDescription("Running weekly job").build();
+//        Trigger weeklyTrigger = TriggerBuilder.newTrigger().withIdentity("week_cron_trigger").forJob(wekklyJobDetail)
+//                .withSchedule(CronScheduleBuilder.cronSchedule(weeklyCron)).build();
+//        scheduler.scheduleJob(wekklyJobDetail, weeklyTrigger);
+//
+//        JobDetail fixDayJobDetail = JobBuilder.newJob(FixedDateCronJob.class)
+//                .withIdentity(JobKey.jobKey("fixed_date_dron_job", "batch"))
+//                .withDescription("Running fixed day job").build();
+//        Trigger fixedDayTrigger = TriggerBuilder.newTrigger().withIdentity("fixed_date_trigger").forJob(fixDayJobDetail)
+//                .withSchedule(CronScheduleBuilder.cronSchedule(fixDayCron)).build();
+//        scheduler.scheduleJob(fixDayJobDetail, fixedDayTrigger);
+//    }
 
 }
 

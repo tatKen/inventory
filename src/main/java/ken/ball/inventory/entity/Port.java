@@ -9,7 +9,6 @@ import org.hibernate.annotations.Parameter;
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Port extends AbstractAudit{

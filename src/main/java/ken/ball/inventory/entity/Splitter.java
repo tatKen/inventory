@@ -8,7 +8,6 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.*;
 
 @Data
-@EqualsAndHashCode
 @Entity
 @NoArgsConstructor
 public class Splitter extends AbstractAudit{
